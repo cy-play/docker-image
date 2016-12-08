@@ -11,8 +11,6 @@ ENV DOCKER_VERSION 1.10.3
 RUN set -x \
 	&& curl -fSL "https://${DOCKER_BUCKET}/builds/Linux/x86_64/docker-${DOCKER_VERSION}.tgz" -o docker.tgz \
 	&& tar -xzvf docker.tgz \
-	&& mv docker/* /usr/local/bin/ \
-	&& rmdir docker \
 	&& rm docker.tgz \
 	&& docker -v
 
