@@ -20,7 +20,7 @@ RUN set -x \
 
 COPY docker-entrypoint.sh /usr/local/bin/
 
-ENV AWS_CLI_VERSION 1.11.28
+ENV AWS_CLI_VERSION 1.10.34
 
 RUN pip install awscli==$AWS_CLI_VERSION
 
