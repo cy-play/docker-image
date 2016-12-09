@@ -24,6 +24,7 @@ ENV AWS_CLI_VERSION 1.10.34
 
 RUN pip install awscli==$AWS_CLI_VERSION
 
+ADD aws-ecr-login /helpers/aws-ecr-login
+
 ENTRYPOINT ["docker-entrypoint.sh"]
 CMD ["sh"]
-
