@@ -1,0 +1,47 @@
+#!/usr/bin/env python
+
+import os
+import subprocess
+
+AWS_KEY = "AWS_ACCESS_KEY_ID"
+AWS_SECRET = "AWS_SECRET_ACCESS_KEY"
+AWS_REGION = "AWS_REGION"
+AWS_CONFIG_DIR = ".aws/"
+
+aws_id = os.environ.get(AWS_KEY)
+aws_secret = os.environ.get(AWS_SECRET)
+aws_region = os.environ.get(AWS_REGION)
+home = os.environ.get("HOME", "~/")
+
+#print aws_id
+#print aws_secret
+#print aws_region
+
+AWS_CONFIG_FILE = os.path.join(home, AWS_CONFIG_DIR, "credentials")
+config_directory = os.path.join(home, AWS_CONFIG_DIR)
+
+if not os.path.exists(config_directory):
+    os.makedirs(config_directory)
+else:
+    print "Directory %s already exists !" % config_directory
+
+# Genrating ~/.aws/credentials file
+if aws_id is not None and aws_secret is not None and aws_region is not None:
+    conf_file = open(AWS_CONFIG_FILE, 'w')
+    print "Generating %s file !" % (AWS_CONFIG_FILE)
+    conf_file.write("[default]\n")
+    conf_file.write("%s = %s\n" % (AWS_KEY.lower(), aws_id))
+    conf_file.write("%s = %s\n" % (AWS_SECRET.lower(), aws_secret))
+    conf_file.write("%s = %s\n" % (AWS_REGION.lower(), aws_region))
+    conf_file.close()
+else:
+    print "There is a missing env variable, please check that you have defined :"
+    print " - %s \n - %s \n - %s" % (AWS_KEY, AWS_SECRET, AWS_REGION)
+    exit -1
+
+# Logging in to ECR Registry
+p1 = subprocess.Popen(["aws", "ecr", "get-login"], stdout=subprocess.PIPE)
+p2 = subprocess.Popen(["sh"], stdin=p1.stdout, stdout=subprocess.PIPE)
+p1.stdout.close()
+output,err = p2.communicate()
+print "Login status : %s" % output
